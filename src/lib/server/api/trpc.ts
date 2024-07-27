@@ -9,6 +9,7 @@
 import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 
 /**
  * 1. CONTEXT
@@ -22,7 +23,7 @@ import { ZodError } from "zod";
  *
  * @see https://trpc.io/docs/server/context
  */
-export const createTRPCContext = async (opts: { headers: Headers }) => {
+export const createTRPCContext = async (opts: FetchCreateContextFnOptions) => {
   return {
     ...opts,
   };
@@ -36,7 +37,13 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
  * errors on the backend.
  */
 const t = initTRPC.context<typeof createTRPCContext>().create({
+  /**
+   * @link https://trpc.io/docs/v11/data-transformers
+   */
   transformer: superjson,
+  /**
+   * @link https://trpc.io/docs/v11/error-formatting
+   */
   errorFormatter({ shape, error }) {
     return {
       ...shape,
