@@ -14,6 +14,7 @@ export async function imageAttributes(img: string) {
   await streamObject({
     model: models.languageModel(GPT_MINI),
     system: visionSystemPrompt,
+    maxTokens: 500000,
     messages: [
       {
         role: "user",
